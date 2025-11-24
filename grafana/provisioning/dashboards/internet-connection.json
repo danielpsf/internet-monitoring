@@ -54,7 +54,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 6,
         "x": 0,
         "y": 0
@@ -125,7 +125,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 6,
         "x": 6,
         "y": 0
@@ -197,13 +197,12 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 12,
         "x": 12,
         "y": 0
       },
       "id": 12,
-      "interval": null,
       "links": [],
       "maxDataPoints": 50000,
       "options": {
@@ -242,6 +241,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -281,10 +282,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 12,
         "x": 0,
-        "y": 9
+        "y": 7
       },
       "id": 6,
       "links": [],
@@ -301,7 +302,6 @@
         }
       },
       "pluginVersion": "7.4.5",
-      "repeat": null,
       "targets": [
         {
           "expr": "speedtest_download_bits_per_second{}",
@@ -361,10 +361,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 12,
         "x": 12,
-        "y": 9
+        "y": 7
       },
       "highlightCards": true,
       "id": 14,
@@ -384,7 +384,7 @@
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
+          "legendFormat": "{{humanname}}",
           "refId": "A"
         }
       ],
@@ -431,7 +431,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 14
       },
       "hiddenSeries": false,
       "id": 4,
@@ -459,17 +459,45 @@
       "renderer": "flot",
       "repeat": "host",
       "repeatDirection": "h",
-      "seriesOverrides": [],
+      "seriesOverrides": [
+        {
+          "alias": "local",
+          "yaxis": 2
+        },
+        {
+          "alias": "tplink-router",
+          "yaxis": 2
+        },
+        {
+          "alias": "ppoe-router",
+          "yaxis": 2
+        }
+      ],
       "spaceLength": 10,
       "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(probe_http_duration_seconds) by (instance)",
+          "editorMode": "builder",
+          "expr": "sum by(humanname) (probe_icmp_duration_seconds{routing=\"external\"})",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "{{instance}}",
-          "refId": "A"
+          "legendFormat": "{{humanname}}",
+          "range": true,
+          "refId": "External"
+        },
+        {
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "sum by(humanname) (probe_icmp_duration_seconds{routing=\"local\"})",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "intervalFactor": 1,
+          "legendFormat": "{{humanname}}",
+          "range": true,
+          "refId": "Internal"
         }
       ],
       "thresholds": [],
@@ -493,18 +521,14 @@
       "yaxes": [
         {
           "format": "short",
-          "label": null,
+          "label": "external",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
+          "label": "internal",
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
@@ -514,8 +538,8 @@
       }
     }
   ],
-  "refresh": "5m",
-  "schemaVersion": 27,
+  "refresh": "5s",
+  "schemaVersion": 37,
   "style": "dark",
   "tags": [
     "speedtest",
@@ -525,7 +549,7 @@
     "list": []
   },
   "time": {
-    "from": "now-7d",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {
